@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.udemycource.spring.hibernate_aop.entity.Employee;
 import org.udemycource.spring.hibernate_aop.service.EmployeeService;
 
@@ -31,14 +32,6 @@ public class MyController {
     @RequestMapping("/addNewEmployee")
     public String addNewEmployee(Model model){
 
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        Scanner scanner = new Scanner(System.in);
-        int a = scanner.nextInt();
-        int b = scanner.nextInt();
-        System.out.println(a+b);
-
-
-
         Employee employee = new Employee();
         model.addAttribute("employee", employee);
 
@@ -49,6 +42,23 @@ public class MyController {
     public String saveEmployee(@ModelAttribute("employee") Employee employee) {
 
         employeeService.saveEmployee(employee);
+
+        return "redirect:/";
+    }
+
+    @RequestMapping("/updateInfo")
+    public String updateEmployee(@RequestParam("empId") int id, Model model) {
+
+        Employee employee = employeeService.getEmployee(id);
+        model.addAttribute("employee", employee);
+
+        return "employee-info";
+    }
+
+    @RequestMapping("/deletEmployee")
+    public String deletEmployee(@RequestParam("empId") int id){
+
+        employeeService.deletEmployee(id);
 
         return "redirect:/";
     }
